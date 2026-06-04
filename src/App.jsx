@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { FirebaseProvider } from "./context/FirebaseContext";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import MenuChoice from "./pages/MenuChoice";
 import Dashboard from "./pages/Dashboard";
 import InputData from "./pages/InputData";
 import Patients from "./pages/Patients";
@@ -22,6 +24,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/menu" element={<MenuChoice />} />
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<InputData />} />
             <Route path="/monitoring" element={<Dashboard />} />

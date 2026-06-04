@@ -1,10 +1,21 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useFirebase } from "../context/FirebaseContext";
 import { IdCard, ActivitySquare, ArrowRight } from "lucide-react";
+import { createEmptyPatient } from "../context/FirebaseContext";
 
 export default function InputData() {
-  const { patient, setPatient, addPatient, updatePatientRecord } = useFirebase();
+  const { patient, setPatient, addPatient, updatePatientRecord, simpanPasienAktif } = useFirebase();
+  const location = useLocation();
   const navigate = useNavigate();
+  const isEditingPatient = Boolean(location.state?.editing);
+  const patientFromNavigation = location.state?.patient;
+
+  useEffect(() => {
+    if (isEditingPatient && patientFromNavigation) {
+      setPatient(patientFromNavigation);
+    }
+  }, [isEditingPatient, patientFromNavigation, setPatient]);
 
   const getSelectClassName = (value) => (value ? "" : "select-placeholder");
 
@@ -128,11 +139,15 @@ export default function InputData() {
     }
 
     try {
-      await simpanKeFirebase();
+      const patientData = buatDataPasienLengkap();
+      const updatedContext = { ...patient, ...patientData };
+      setPatient(updatedContext);
+      await simpanPasienAktif(updatedContext);
+      
       navigate("/monitoring");
     } catch (error) {
       console.error(error);
-      alert("Gagal menyimpan data ke Firebase");
+      alert("Gagal melihat monitoring");
     }
   };
 
@@ -147,17 +162,7 @@ export default function InputData() {
     try {
       await simpanKeFirebase();
 
-      setPatient({
-        nama: "",
-        umur: "",
-        jenisKelamin: "",
-        persepsiSensori: "",
-        kelembapan: "",
-        aktivitas: "",
-        mobilitas: "",
-        nutrisi: "",
-        gesekan: "",
-      });
+      setPatient(createEmptyPatient());
 
       navigate("/patients");
     } catch (error) {
