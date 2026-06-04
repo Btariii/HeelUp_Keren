@@ -1,6 +1,7 @@
 import { useFirebase } from "../context/FirebaseContext";
-import { IdCard, Gauge, Clock, BellRing, CheckCircle, AlertCircle, Info, Loader } from "lucide-react";
+import { IdCard, Gauge, Clock, BellRing, CheckCircle, AlertCircle, Info, Loader, Save, ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const {
@@ -12,11 +13,15 @@ export default function Dashboard() {
     jumlahReposisi,
     lastReposition,
     patient,
+    addPatient,
+    updatePatientRecord,
   } = useFirebase();
+  const navigate = useNavigate();
 
   const [isCalculating, setIsCalculating] = useState(true);
   const [displayPressure, setDisplayPressure] = useState(0);
   const [displayBraden, setDisplayBraden] = useState(0);
+  const [saveMessage, setSaveMessage] = useState("");
 
   useEffect(() => {
     // Scramble effect
@@ -60,6 +65,98 @@ export default function Dashboard() {
     minute: "2-digit",
   });
 
+  const isPatientFormComplete = Boolean(
+    patient.nama &&
+    patient.umur &&
+    patient.jenisKelamin &&
+    patient.persepsiSensori &&
+    patient.kelembapan &&
+    patient.aktivitas &&
+    patient.mobilitas &&
+    patient.nutrisi &&
+    patient.gesekan
+  );
+
+  const hitungSkorBraden = () => {
+    return (
+      Number(patient.persepsiSensori || 0) +
+      Number(patient.kelembapan || 0) +
+      Number(patient.aktivitas || 0) +
+      Number(patient.mobilitas || 0) +
+      Number(patient.nutrisi || 0) +
+      Number(patient.gesekan || 0)
+    );
+  };
+
+  const tentukanRisikoDanDurasi = (skorBraden) => {
+    if (skorBraden <= 12) {
+      return {
+        risiko: "TINGGI",
+        risk: "HIGH",
+        durasiReposisiDetik: 60,
+        keteranganDurasi: "1 menit tiap posisi",
+      };
+    }
+
+    if (skorBraden <= 18) {
+      return {
+        risiko: "SEDANG",
+        risk: "MEDIUM",
+        durasiReposisiDetik: 120,
+        keteranganDurasi: "2 menit tiap posisi",
+      };
+    }
+
+    return {
+      risiko: "RENDAH",
+      risk: "LOW",
+      durasiReposisiDetik: 180,
+      keteranganDurasi: "3 menit tiap posisi",
+    };
+  };
+
+  const handleSaveRecord = async () => {
+    if (!isPatientFormComplete) {
+      setSaveMessage("Lengkapi data pasien dulu sebelum menyimpan.");
+      return;
+    }
+
+    const skorBraden = hitungSkorBraden();
+    const hasil = tentukanRisikoDanDurasi(skorBraden);
+
+    const patientData = {
+      nama: patient.nama,
+      jenisKelamin: patient.jenisKelamin,
+      umur: patient.umur,
+      persepsiSensori: patient.persepsiSensori,
+      kelembapan: patient.kelembapan,
+      aktivitas: patient.aktivitas,
+      mobilitas: patient.mobilitas,
+      nutrisi: patient.nutrisi,
+      gesekan: patient.gesekan,
+      skorBraden,
+      bradenScore: skorBraden,
+      risiko: hasil.risiko,
+      risk: hasil.risk,
+      durasiReposisiDetik: hasil.durasiReposisiDetik,
+      keteranganDurasi: hasil.keteranganDurasi,
+    };
+
+    try {
+      if (patient.id) {
+        await updatePatientRecord(patient.id, patientData);
+      } else {
+        await addPatient(patientData);
+      }
+
+      setSaveMessage("Record berhasil disimpan.");
+      navigate("/patients");
+    } catch (error) {
+      console.error(error);
+      setSaveMessage("Gagal menyimpan record.");
+    }
+  };
+
   function formatTimer(totalDetik) {
     const menit = Math.floor(totalDetik / 60);
     const detik = totalDetik % 60;
@@ -71,6 +168,18 @@ export default function Dashboard() {
       <div className="page-header animate-fade-in">
         <h1>Heel Pressure Monitoring Dashboard</h1>
         <p>Real-time pressure analytics and patient status overview.</p>
+      </div>
+
+      <div className="dashboard-actions animate-fade-in delay-1">
+        <button type="button" className="btn-outline dashboard-back-btn" onClick={() => navigate(-1)}>
+          <ArrowLeft size={16} />
+          Kembali
+        </button>
+        <button type="button" className="btn-primary dashboard-save-btn" onClick={handleSaveRecord}>
+          <Save size={16} />
+          Save Record
+        </button>
+        {saveMessage ? <span className="dashboard-save-message">{saveMessage}</span> : null}
       </div>
 
       <div className="dashboard-grid">

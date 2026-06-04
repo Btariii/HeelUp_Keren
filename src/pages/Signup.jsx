@@ -1,34 +1,45 @@
-import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowRight, Lock, User, ShieldCheck, Activity, Footprints } from "lucide-react";
-import { findUser } from "../utils/authStorage";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowRight, KeyRound, Lock, User, Footprints, UserPlus, Shield } from "lucide-react";
+import { createUser, userExists } from "../utils/authStorage";
 
-export default function Login() {
-  const location = useLocation();
-  const [username, setUsername] = useState(location.state?.username ?? "");
+export default function Signup() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState(location.state?.message ?? "");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!location.state) {
-      return;
-    }
-
-    navigate(".", { replace: true, state: null });
-  }, [location.state, navigate]);
-
-  const handleLogin = (e) => {
+  const handleSignup = (e) => {
     e.preventDefault();
     setError("");
 
-    if (findUser(username, password)) {
-      navigate("/menu");
-    } else {
-      setMessage("");
-      setError("Username atau password salah.");
+    const cleanUsername = username.trim();
+
+    if (!cleanUsername || !password || !confirmPassword) {
+      setError("Semua field wajib diisi.");
+      return;
     }
+
+    if (password !== confirmPassword) {
+      setError("Password dan confirm password tidak sama.");
+      return;
+    }
+
+    if (userExists(cleanUsername)) {
+      setError("Username sudah dipakai, coba yang lain.");
+      return;
+    }
+
+    createUser({ username: cleanUsername, password });
+
+    navigate("/", {
+      replace: true,
+      state: {
+        username: cleanUsername,
+        message: "Akun berhasil dibuat. Silakan login.",
+      },
+    });
   };
 
   return (
@@ -42,26 +53,26 @@ export default function Login() {
             </div>
             <h1 className="auth-brand-title">HeelUp</h1>
             <p className="auth-brand-subtitle">
-              Smart Heel Pressure Monitoring &amp; Pressure Ulcer Risk Assessment System
+              Buat akun baru untuk mulai memantau tekanan tumit dan mencegah pressure ulcer.
             </p>
 
             <div className="auth-brand-features">
               <div className="auth-brand-feature">
                 <div className="auth-brand-feature-icon">
-                  <Activity size={18} />
+                  <UserPlus size={18} />
                 </div>
                 <div>
-                  <span className="auth-brand-feature-label">Real-time Monitoring</span>
-                  <span className="auth-brand-feature-desc">Pantau tekanan tumit secara langsung</span>
+                  <span className="auth-brand-feature-label">Registrasi Cepat</span>
+                  <span className="auth-brand-feature-desc">Hanya 3 langkah untuk membuat akun</span>
                 </div>
               </div>
               <div className="auth-brand-feature">
                 <div className="auth-brand-feature-icon">
-                  <ShieldCheck size={18} />
+                  <Shield size={18} />
                 </div>
                 <div>
-                  <span className="auth-brand-feature-label">Braden Scale Assessment</span>
-                  <span className="auth-brand-feature-desc">Penilaian risiko pressure ulcer otomatis</span>
+                  <span className="auth-brand-feature-label">Aman & Terjaga</span>
+                  <span className="auth-brand-feature-desc">Data pasien tersimpan dengan aman</span>
                 </div>
               </div>
             </div>
@@ -74,13 +85,12 @@ export default function Login() {
         </div>
 
         {/* Right Form Panel */}
-        <form className="auth-form-panel" onSubmit={handleLogin}>
+        <form className="auth-form-panel" onSubmit={handleSignup}>
           <div className="auth-form-header">
-            <h2>Selamat Datang</h2>
-            <p className="subtitle">Masuk ke akun Anda untuk melanjutkan</p>
+            <h2>Buat Akun Baru</h2>
+            <p className="subtitle">Daftar untuk mendapatkan akses penuh ke HeelUp</p>
           </div>
 
-          {message ? <div className="auth-message success">{message}</div> : null}
           {error ? <div className="auth-message error">{error}</div> : null}
 
           <div className="auth-form-fields">
@@ -90,7 +100,7 @@ export default function Login() {
                 <User size={18} />
                 <input
                   type="text"
-                  placeholder="Masukkan username"
+                  placeholder="Pilih username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   autoComplete="username"
@@ -104,26 +114,39 @@ export default function Login() {
                 <Lock size={18} />
                 <input
                   type="password"
-                  placeholder="Masukkan password"
+                  placeholder="Buat password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
+                  autoComplete="new-password"
+                />
+              </div>
+            </div>
+
+            <div className="input-group">
+              <label className="input-label">Konfirmasi Password</label>
+              <div className="input-wrapper">
+                <KeyRound size={18} />
+                <input
+                  type="password"
+                  placeholder="Ulangi password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  autoComplete="new-password"
                 />
               </div>
             </div>
           </div>
 
           <button type="submit" className="btn-primary auth-submit-btn">
-            Masuk
+            Buat Akun
             <ArrowRight size={18} />
           </button>
 
           <div className="auth-footer">
-            <p className="hint">Demo: username <b>admin</b> · password <b>12345</b></p>
             <div className="auth-footer-link">
-              <span>Belum punya akun?</span>
-              <Link to="/signup" className="auth-link">
-                Buat akun baru
+              <span>Sudah punya akun?</span>
+              <Link to="/" className="auth-link">
+                Login di sini
               </Link>
             </div>
           </div>
