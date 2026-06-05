@@ -24,13 +24,20 @@ export default function Patients() {
     if (!g) return "-";
     if (typeof g !== "string") return g;
     const low = g.toLowerCase();
-    if (low === "m" || low === "male") return "Male";
-    if (low === "f" || low === "female") return "Female";
+    if (low === "m" || low === "male") return "Laki-laki";
+    if (low === "f" || low === "female") return "Perempuan";
     return g.charAt(0).toUpperCase() + g.slice(1);
   };
 
+  // --- tambahkan mapping risiko di sini ---
+const riskMap = {
+  HIGH: { label: "Tinggi", className: "high" },
+  //MEDIUM: { label: "Sedang", className: "medium" }//
+  LOW: { label: "Rendah", className: "low" },
+};
+
   const formatRiskLabel = (r) => {
-    if (!r) return "Low";
+    if (!r) return "Rendah";
     const s = String(r).toLowerCase();
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
@@ -103,7 +110,7 @@ export default function Patients() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this patient record?")) {
+    if (window.confirm("Apakah Anda yakin ingin menghapus data pasien ini?")) {
       await deletePatientRecord(id);
     }
   };
@@ -111,8 +118,8 @@ export default function Patients() {
   return (
     <div>
       <div className="page-header">
-        <h1>Patient List</h1>
-        <p>Patient data management and pressure injury risk monitoring.</p>
+        <h1>Daftar Pasien</h1>
+        <p>Manajemen data pasien dan pemantauan risiko luka tekan.</p>
       </div>
 
       <div className="filters-bar">
@@ -120,7 +127,7 @@ export default function Patients() {
           <Search size={16} />
           <input 
             type="text" 
-            placeholder="Search patient name..." 
+            placeholder="Cari nama pasien..." 
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
@@ -131,19 +138,19 @@ export default function Patients() {
             className={`pill ${filter === "All" ? "active" : ""}`}
             onClick={() => setFilter("All")}
           >
-            <div className="pill-dot all"></div> All
+            <div className="pill-dot all"></div> Semua
           </div>
           <div 
-            className={`pill ${filter === "High" ? "active" : ""}`}
-            onClick={() => setFilter("High")}
+            className={`pill ${filter === "tinggi" ? "active" : ""}`}
+            onClick={() => setFilter("Tinggi")}
           >
-            <div className="pill-dot high"></div> High
+            <div className="pill-dot high"></div> Tinggi
           </div>
           <div 
-            className={`pill ${filter === "Low" ? "active" : ""}`}
-            onClick={() => setFilter("Low")}
+            className={`pill ${filter === "Rendah" ? "active" : ""}`}
+            onClick={() => setFilter("Rendah")}
           >
-            <div className="pill-dot low"></div> Low
+            <div className="pill-dot low"></div> Rendah
           </div>
         </div>
       </div>
@@ -152,11 +159,11 @@ export default function Patients() {
         <table>
           <thead>
             <tr>
-              <th>Patient Name</th>
-              <th>Gender</th>
-              <th>Age</th>
-              <th>Pressure Ulcer Risk</th>
-              <th>Actions</th>
+              <th>Nama</th>
+              <th>Jenis Kelamin</th>
+              <th>Umur</th>
+              <th>Risiko Luka Tekan</th>
+              <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -174,18 +181,18 @@ export default function Patients() {
                           <span>{group.currentRecord.nama}</span>
                           {hasHistory ? (
                             <span className="record-note">
-                              {group.historyRecords.length} old version{group.historyRecords.length > 1 ? "s" : ""}
+                              {group.historyRecords.length} versi lama
                             </span>
                           ) : null}
                         </div>
                       </div>
                     </td>
                     <td>{formatGender(group.currentRecord.jenisKelamin)}</td>
-                    <td>{group.currentRecord.umur} yrs</td>
+                    <td>{group.currentRecord.umur} thn</td>
                     <td>
-                      <div className={`risk-tag ${group.currentRecord.risk === "HIGH" ? "high" : group.currentRecord.risk === "MEDIUM" ? "medium" : "low"}`}>
-                        <div className={`pill-dot ${group.currentRecord.risk === "HIGH" ? "high" : group.currentRecord.risk === "MEDIUM" ? "medium" : "low"}`}></div>
-                        {formatRiskLabel(group.currentRecord.risk)}
+                      <div className={`risk-tag ${riskMap[group.currentRecord.risk].className}`}>
+                        <div className={`pill-dot ${riskMap[group.currentRecord.risk].className}`}></div>
+                        {riskMap[group.currentRecord.risk].label}
                       </div>
                     </td>
                     <td>
@@ -206,7 +213,7 @@ export default function Patients() {
                             onClick={() => toggleGroupHistory(group.groupId)}
                           >
                             {isExpanded ? <EyeOff size={14} /> : <Eye size={14} />}
-                            {isExpanded ? "Hide old" : "Show old"}
+                            {isExpanded ? "Sembunyikan" : "Lihat Versi Lama"}
                           </button>
                         ) : null}
                       </div>
@@ -222,13 +229,13 @@ export default function Patients() {
                               <div className="patient-name-stack">
                                 <span>{historyRecord.nama}</span>
                                 <span className="record-note">
-                                  Old v{historyRecord.version || 1}
+                                  {group.historyRecords.length} versi lama
                                 </span>
                               </div>
                             </div>
                           </td>
                           <td>{formatGender(historyRecord.jenisKelamin)}</td>
-                          <td>{historyRecord.umur} yrs</td>
+                          <td>{historyRecord.umur} thn</td>
                           <td>
                             <div className={`risk-tag ${historyRecord.risk === "HIGH" ? "high" : historyRecord.risk === "MEDIUM" ? "medium" : "low"}`}>
                               <div className={`pill-dot ${historyRecord.risk === "HIGH" ? "high" : historyRecord.risk === "MEDIUM" ? "medium" : "low"}`}></div>
@@ -238,7 +245,7 @@ export default function Patients() {
                           <td>
                             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                               <button type="button" className="history-row-btn" onClick={() => setViewPatient(historyRecord)}>
-                                View old version
+                                Lihat versi lama
                               </button>
                               <button type="button" className="btn-icon" onClick={() => handleDelete(historyRecord.id)}>
                                 <Trash2 size={16} />
@@ -255,11 +262,11 @@ export default function Patients() {
         </table>
         
         <div className="pagination">
-          <div>Showing 1-{groupedPatients.length} of {groupedPatients.length} patients</div>
+          <div>Tampilan 1-{groupedPatients.length} dari {groupedPatients.length} pasien</div>
           <div className="page-controls">
-            <button className="page-btn">Prev</button>
+            <button className="page-btn">Sebelum</button>
             <button className="page-btn active">1</button>
-            <button className="page-btn">Next</button>
+            <button className="page-btn">Selanjutnya</button>
           </div>
         </div>
       </div>
@@ -270,28 +277,28 @@ export default function Patients() {
             <button className="btn-icon" style={{ position: "absolute", top: "16px", right: "16px", border: "none" }} onClick={() => setViewPatient(null)}>
               <X size={20} />
             </button>
-            <h2 style={{ color: "var(--text-bright)", marginBottom: "20px", fontSize: "20px" }}>Patient Details</h2>
+            <h2 style={{ color: "var(--text-bright)", marginBottom: "20px", fontSize: "20px" }}>Detail Pasien</h2>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "12px", color: "var(--text-main)", fontSize: "14px" }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--text-muted)" }}>Name</span>
+                <span style={{ color: "var(--text-muted)" }}>Nama</span>
                 <b>{viewPatient.nama}</b>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--text-muted)" }}>Age</span>
-                <b>{viewPatient.umur} yrs</b>
+                <span style={{ color: "var(--text-muted)" }}>Umur</span>
+                <b>{viewPatient.umur} tahun</b>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--text-muted)" }}>Gender</span>
+                <span style={{ color: "var(--text-muted)" }}>Jenis Kelamin</span>
                 <b>{viewPatient.jenisKelamin}</b>
               </div>
               <hr style={{ borderColor: "var(--border-color)", margin: "12px 0" }} />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ color: "var(--text-muted)" }}>Braden Score</span>
+                <span style={{ color: "var(--text-muted)" }}>Skor Braden</span>
                 <b>{viewPatient.bradenScore}</b>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ color: "var(--text-muted)" }}>Pressure Ulcer Risk</span>
+                <span style={{ color: "var(--text-muted)" }}>Risiko Luka Tekan</span>
                 <div className={`risk-tag ${viewPatient.risk === "HIGH" ? "high" : "low"}`}>
                   {viewPatient.risk || "LOW"}
                 </div>

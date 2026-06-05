@@ -27,7 +27,7 @@ export default function Login() {
       navigate("/menu");
     } else {
       setMessage("");
-      setError("Username atau password salah.");
+      setError("Nama Pengguna atau Kata Sandi salah.");
     }
   };
 
@@ -42,7 +42,7 @@ export default function Login() {
             </div>
             <h1 className="auth-brand-title">HeelUp</h1>
             <p className="auth-brand-subtitle">
-              Smart Heel Pressure Monitoring &amp; Pressure Ulcer Risk Assessment System
+              Sistem Pemantauan Tekanan Tumit &amp; Penilaian Risiko Luka Tekan
             </p>
 
             <div className="auth-brand-features">
@@ -51,7 +51,7 @@ export default function Login() {
                   <Activity size={18} />
                 </div>
                 <div>
-                  <span className="auth-brand-feature-label">Real-time Monitoring</span>
+                  <span className="auth-brand-feature-label">Pemantauan Real-time</span>
                   <span className="auth-brand-feature-desc">Pantau tekanan tumit secara langsung</span>
                 </div>
               </div>
@@ -60,8 +60,8 @@ export default function Login() {
                   <ShieldCheck size={18} />
                 </div>
                 <div>
-                  <span className="auth-brand-feature-label">Braden Scale Assessment</span>
-                  <span className="auth-brand-feature-desc">Penilaian risiko pressure ulcer otomatis</span>
+                  <span className="auth-brand-feature-label">Penilaian Skala Braden</span>
+                  <span className="auth-brand-feature-desc">Penilaian risiko luka tekan otomatis</span>
                 </div>
               </div>
             </div>
@@ -85,12 +85,12 @@ export default function Login() {
 
           <div className="auth-form-fields">
             <div className="input-group">
-              <label className="input-label">Username</label>
+              <label className="input-label">Nama Pengguna</label>
               <div className="input-wrapper">
                 <User size={18} />
                 <input
                   type="text"
-                  placeholder="Masukkan username"
+                  placeholder="Masukkan nama pengguna"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   autoComplete="username"
@@ -99,12 +99,12 @@ export default function Login() {
             </div>
 
             <div className="input-group">
-              <label className="input-label">Password</label>
+              <label className="input-label">Kata Sandi</label>
               <div className="input-wrapper">
                 <Lock size={18} />
                 <input
                   type="password"
-                  placeholder="Masukkan password"
+                  placeholder="Masukkan kata sandi"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
@@ -119,7 +119,7 @@ export default function Login() {
           </button>
 
           <div className="auth-footer">
-            <p className="hint">Demo: username <b>admin</b> · password <b>12345</b></p>
+            <p className="hint">Demo: nama pengguna <b>admin</b> · kata sandi <b>12345</b></p>
             <div className="auth-footer-link">
               <span>Belum punya akun?</span>
               <Link to="/signup" className="auth-link">

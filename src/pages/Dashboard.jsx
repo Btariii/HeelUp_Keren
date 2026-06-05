@@ -18,6 +18,18 @@ export default function Dashboard() {
   } = useFirebase();
   const navigate = useNavigate();
 
+  const riskMap = {
+  HIGH: { label: "Tinggi", color: "#ef4444", bgColor: "rgba(239, 68, 68, 0.2)" },
+  LOW: { label: "Rendah", color: "#22c55e", bgColor: "rgba(34, 197, 94, 0.2)" },
+};
+
+  function formatGender(gender) {
+  if (!gender) return "-";
+  const low = gender.toLowerCase();
+  if (low === "female") return "Perempuan";
+  if (low === "male") return "Laki-laki";
+  return gender;
+}
   const [isCalculating, setIsCalculating] = useState(true);
   const [displayPressure, setDisplayPressure] = useState(0);
   const [displayBraden, setDisplayBraden] = useState(0);
@@ -166,8 +178,8 @@ export default function Dashboard() {
   return (
     <div>
       <div className="page-header animate-fade-in">
-        <h1>Heel Pressure Monitoring Dashboard</h1>
-        <p>Real-time pressure analytics and patient status overview.</p>
+        <h1>Dasbor Pemantauan Tekanan Tumit</h1>
+        <p>Analisis tekanan realtime dan status pasien.</p>
       </div>
 
       <div className="dashboard-actions animate-fade-in delay-1">
@@ -177,7 +189,7 @@ export default function Dashboard() {
         </button>
         <button type="button" className="btn-primary dashboard-save-btn" onClick={handleSaveRecord}>
           <Save size={16} />
-          Save Record
+          Simpan Riwayat
         </button>
         {saveMessage ? <span className="dashboard-save-message">{saveMessage}</span> : null}
       </div>
@@ -186,33 +198,33 @@ export default function Dashboard() {
         <div className="card animate-fade-in delay-1">
           <div className="card-title">
             <IdCard size={16} />
-            PATIENT IDENTIFICATION
+            IDENTIFIKASI PASIEN
           </div>
           
           <div className="patient-info-row">
-            <span>Name</span>
+            <span>Nama</span>
             <span>:</span>
             <span>{patient.nama || "-"}</span>
           </div>
           <div className="patient-info-row">
-            <span>Age</span>
+            <span>Umur</span>
             <span>:</span>
-            <span>{patient.umur || "-"} yrs</span>
+            <span>{patient.umur || "-"} tahun</span>
           </div>
           <div className="patient-info-row">
-            <span>Gender</span>
+            <span>Jenis Kelamin</span>
             <span>:</span>
-            <span>{patient.jenisKelamin || "-"}</span>
+            <span>{formatGender(patient.jenisKelamin)}</span>
           </div>
         </div>
 
         <div className="card risk-card animate-fade-in delay-2" style={{ border: isCalculating ? "1px solid #8b949e" : "1px solid var(--accent-color)" }}>
           <div>
             <h2 style={{ fontSize: "28px", fontWeight: "900", color: "#fff", lineHeight: "1.2" }}>
-              PRESSURE<br />ULCER RISK
+              PRESSURE<br />RISIKO LUKA TEKAN
             </h2>
             <p style={{ color: "#8b949e", fontSize: "12px", letterSpacing: "2px", marginTop: "8px", textTransform: "uppercase" }}>
-              {isCalculating ? "Calculating..." : "Braden Scale Score"}
+              {isCalculating ? "Menghitung..." : "Skor Skala Braden"}
             </p>
           </div>
           <div className="risk-score">
@@ -220,10 +232,10 @@ export default function Dashboard() {
               {finalBraden}
             </h1>
             <div className="risk-badge" style={{ 
-              background: isCalculating ? "rgba(139, 148, 158, 0.2)" : (risiko === "HIGH" ? "rgba(239, 68, 68, 0.2)" : "rgba(34, 197, 94, 0.2)"),
-              color: isCalculating ? "#8b949e" : (risiko === "HIGH" ? "#ef4444" : "#22c55e") 
+              background: isCalculating ? "rgba(139, 148, 158, 0.2)" : riskMap[risiko].bgColor,
+              color: isCalculating ? "#8b949e" : riskMap[risiko].color
             }}>
-              {isCalculating ? "..." : risiko}
+              {isCalculating ? "..." :  riskMap[risiko].label}
             </div>
           </div>
         </div>
@@ -233,7 +245,7 @@ export default function Dashboard() {
         <div className="card animate-fade-in delay-3">
           <div className="card-title">
             <Gauge size={16} />
-            {isCalculating ? "ANALYZING SENSOR..." : "HEEL PRESSURE"}
+            {isCalculating ? "ANALYZING SENSOR..." : "TEKANAN TUMIT"}
           </div>
           
           <div className="gauge-container">
@@ -255,9 +267,9 @@ export default function Dashboard() {
             </div>
 
             <div className={`status-badge ${isCalculating ? "" : (tekananTinggi ? "danger" : "safe")}`} style={{ border: isCalculating ? "1px solid #30363d" : undefined, color: isCalculating ? "#8b949e" : undefined, background: isCalculating ? "transparent" : undefined }}>
-              {isCalculating ? "Calculating..." : (tekananTinggi ? "High Pressure" : "Safe")}
+              {isCalculating ? "Calculating..." : (tekananTinggi ? "Tekanan Tinggi" : "Aman")}
             </div>
-            <p className="limit-text">Safe Threshold: &lt; 35 mmHg</p>
+            <p className="limit-text">Batas Aman: &lt; 35 mmHg</p>
           </div>
         </div>
 
@@ -265,15 +277,15 @@ export default function Dashboard() {
           <div className="card animate-fade-in delay-4">
             <div className="card-title">
               <Clock size={16} />
-              LAST REPOSITION TIME
+              WAKTU REPOSISI TERAKHIR
             </div>
             
             <div className="timer-display">
               <h1>{waktuReposisi}</h1>
               <div className="timer-box">
-                <span>Reposition Timer</span>
+                <span>Timer Reposisi</span>
                 <b>{formatTimer(timerReposisi)}</b>
-                <p>Stage: {servoStatus} {tahapReposisi ? `(${tahapReposisi})` : ""}</p>
+                <p>Posisi: {servoStatus} {tahapReposisi ? `(${tahapReposisi})` : ""}</p>
               </div>
             </div>
           </div>
@@ -290,8 +302,8 @@ export default function Dashboard() {
                   <Loader size={24} className="animate-spin" />
                 </div>
                 <div className="notif-content">
-                  <h3>Analyzing Status</h3>
-                  <p>Please wait...</p>
+                  <h3>Menganalisis Status</h3>
+                  <p>Mohon tunggu...</p>
                 </div>
               </div>
             ) : (
@@ -300,11 +312,11 @@ export default function Dashboard() {
                   {tekananTinggi ? <AlertCircle size={24} /> : <CheckCircle size={24} />}
                 </div>
                 <div className="notif-content">
-                  <h3>{tekananTinggi ? "ALERT" : "SAFE"}</h3>
+                  <h3>{tekananTinggi ? "ALERT" : "AMAN"}</h3>
                   <p>
                     {tekananTinggi
-                      ? `Pressure reached ${finalPressure.toFixed(1)} mmHg`
-                      : "Pressure within normal range"}
+                      ? `Tekanan mencapai ${finalPressure.toFixed(1)} mmHg`
+                      : "Tekanan dalam batas normal"}
                   </p>
                 </div>
               </div>
@@ -315,18 +327,18 @@ export default function Dashboard() {
                 <Info size={24} />
               </div>
               <div className="notif-content">
-                <h3>Automatic Repositioning</h3>
+                <h3>Reposisi Otomatis</h3>
                 <p>
                   {prosesReposisi
-                    ? `Servo is in ${servoStatus}`
-                    : "Waiting for high pressure"}
+                    ? `Servo sedang di ${servoStatus}`
+                    : "Menunggu tekanan tinggi"}
                 </p>
               </div>
             </div>
 
             <div style={{ display: "flex", justifyContent: "space-between", background: "rgba(15, 23, 42, 0.04)", padding: "12px 16px", borderRadius: "8px", marginTop: "16px", fontSize: "14px", color: "var(--text-main)" }}>
               <span>Jumlah Reposisi</span>
-              <b style={{ color: "var(--accent-color)" }}>{jumlahReposisi} Times</b>
+              <b style={{ color: "var(--accent-color)" }}>{jumlahReposisi} kali</b>
             </div>
           </div>
         </div>

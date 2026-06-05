@@ -17,17 +17,17 @@ export default function Signup() {
     const cleanUsername = username.trim();
 
     if (!cleanUsername || !password || !confirmPassword) {
-      setError("Semua field wajib diisi.");
+      setError("Semua kolom wajib diisi.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Password dan confirm password tidak sama.");
+      setError("Kata sandi dan Konfirmasi Kata Sandi tidak sama.");
       return;
     }
 
     if (userExists(cleanUsername)) {
-      setError("Username sudah dipakai, coba yang lain.");
+      setError("Nama pengguna sudah dipakai, coba yang lain.");
       return;
     }
 
@@ -95,12 +95,12 @@ export default function Signup() {
 
           <div className="auth-form-fields">
             <div className="input-group">
-              <label className="input-label">Username</label>
+              <label className="input-label">Nama Pengguna</label>
               <div className="input-wrapper">
                 <User size={18} />
                 <input
                   type="text"
-                  placeholder="Pilih username"
+                  placeholder="Masukkan nama pengguna"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   autoComplete="username"
@@ -109,12 +109,12 @@ export default function Signup() {
             </div>
 
             <div className="input-group">
-              <label className="input-label">Password</label>
+              <label className="input-label">Kata Sandi</label>
               <div className="input-wrapper">
                 <Lock size={18} />
                 <input
                   type="password"
-                  placeholder="Buat password"
+                  placeholder="Buat kata sandi"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="new-password"
@@ -123,12 +123,12 @@ export default function Signup() {
             </div>
 
             <div className="input-group">
-              <label className="input-label">Konfirmasi Password</label>
+              <label className="input-label">Konfirmasi Kata Sandi</label>
               <div className="input-wrapper">
                 <KeyRound size={18} />
                 <input
                   type="password"
-                  placeholder="Ulangi password"
+                  placeholder="Ulangi kata sandi"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   autoComplete="new-password"
@@ -146,7 +146,7 @@ export default function Signup() {
             <div className="auth-footer-link">
               <span>Sudah punya akun?</span>
               <Link to="/" className="auth-link">
-                Login di sini
+                Masuk di sini
               </Link>
             </div>
           </div>

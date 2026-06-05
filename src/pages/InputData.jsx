@@ -174,8 +174,8 @@ export default function InputData() {
   return (
     <div>
       <div className="page-header">
-        <h1>Input Patient Data</h1>
-        <p>Enter patient details and conduct Braden Scale assessment.</p>
+        <h1>Masukkan Data Pasien</h1>
+        <p>Masukkan data pasien dan lakukan penilaian Skala Braden.</p>
       </div>
 
       <form onSubmit={handleSimpan}>
@@ -183,41 +183,41 @@ export default function InputData() {
           <div className="card">
             <div className="card-title">
               <IdCard size={16} />
-              Identity
+              Identitas
             </div>
 
             <div className="form-group">
-              <label>Patient Name</label>
+              <label>Nama Pasien</label>
               <input
                 name="nama"
-                placeholder="Enter full name"
+                placeholder="Masukkan nama pasien"
                 value={patient.nama}
                 onChange={handleChange}
               />
             </div>
 
             <div className="form-group" style={{ marginTop: "16px" }}>
-              <label>Age</label>
+              <label>Umur</label>
               <input
                 type="number"
                 name="umur"
-                placeholder="Years"
+                placeholder="Masukkan umur pasien"
                 value={patient.umur}
                 onChange={handleChange}
               />
             </div>
 
             <div className="form-group" style={{ marginTop: "16px" }}>
-              <label>Gender</label>
+              <label>Jenis Kelamin</label>
               <select
                 name="jenisKelamin"
                 className={getSelectClassName(patient.jenisKelamin)}
                 value={patient.jenisKelamin}
                 onChange={handleChange}
               >
-                <option value="">Select gender</option>
-                <option value="Female">Female</option>
-                <option value="Male">Male</option>
+                <option value="">Pilih jenis kelamin</option>
+                <option value="Female">Perempuan</option>
+                <option value="Male">Laki-laki</option>
               </select>
             </div>
           </div>
@@ -225,102 +225,102 @@ export default function InputData() {
           <div className="card">
             <div className="card-title">
               <ActivitySquare size={16} />
-              Braden Scale
+              Skala Braden
             </div>
 
             <div className="form-grid" style={{ gap: "16px" }}>
               <div className="form-group">
-                <label>Sensory Perception</label>
+                <label>Persepsi Sensori</label>
                 <select
                   name="persepsiSensori"
                   className={getSelectClassName(patient.persepsiSensori)}
                   value={patient.persepsiSensori}
                   onChange={handleChange}
                 >
-                  <option value="">Select sensory perception</option>
-                  <option value="1">1 - Completely Limited</option>
-                  <option value="2">2 - Very Limited</option>
-                  <option value="3">3 - Slightly Limited</option>
-                  <option value="4">4 - No Impairment</option>
+                  <option value="">Pilih persepsi sensori</option>
+                  <option value="1">1 - Sepenuhnya Terbatas</option>
+                  <option value="2">2 - Sangat Terbatas</option>
+                  <option value="3">3 - Sedikit Terbatas</option>
+                  <option value="4">4 - Tidak Ada Gangguan</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label>Moisture</label>
+                <label>Kelembapan</label>
                 <select
                   name="kelembapan"
                   className={getSelectClassName(patient.kelembapan)}
                   value={patient.kelembapan}
                   onChange={handleChange}
                 >
-                  <option value="">Select moisture level</option>
-                  <option value="1">1 - Always Moist</option>
-                  <option value="2">2 - Often Moist</option>
-                  <option value="3">3 - Occasionally Moist</option>
-                  <option value="4">4 - Rarely Moist</option>
+                  <option value="">Pilih tingkat kelembapan</option>
+                  <option value="1">1 - Selalu Lembab</option>
+                  <option value="2">2 - Sering Lembab</option>
+                  <option value="3">3 - Kadang Lembab</option>
+                  <option value="4">4 - Jarang Lembab</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label>Activity</label>
+                <label>Aktivitas</label>
                 <select
                   name="aktivitas"
                   className={getSelectClassName(patient.aktivitas)}
                   value={patient.aktivitas}
                   onChange={handleChange}
                 >
-                  <option value="">Select activity level</option>
-                  <option value="1">1 - Bedfast / Confined to bed</option>
-                  <option value="2">2 - Chairfast / Confined to chair</option>
-                  <option value="3">3 - Walks occasionally</option>
-                  <option value="4">4 - Walks frequently</option>
+                  <option value="">Pilih tingkat aktivitas</option>
+                  <option value="1">1 - Tidak Bisa Berdiri / Terbatas di Tempat Tidur</option>
+                  <option value="2">2 - Tidak Bisa Duduk / Terbatas di Kursi</option>
+                  <option value="3">3 - Jalan Sering</option>
+                  <option value="4">4 - Jalan Sering</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label>Mobility</label>
+                <label>Mobilitas</label>
                 <select
                   name="mobilitas"
                   className={getSelectClassName(patient.mobilitas)}
                   value={patient.mobilitas}
                   onChange={handleChange}
                 >
-                  <option value="">Select mobility level</option>
-                  <option value="1">1 - Completely Immobile</option>
-                  <option value="2">2 - Very Limited</option>
-                  <option value="3">3 - Slightly Limited</option>
-                  <option value="4">4 - No Limit</option>
+                  <option value="">Pilih tingkat mobilitas</option>
+                  <option value="1">1 - Sepenuhnya Imobil</option>
+                  <option value="2">2 - Sangat Terbatas</option>
+                  <option value="3">3 - Sedikit Terbatas</option>
+                  <option value="4">4 - Tidak Ada Batasan</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label>Nutrition</label>
+                <label>Nutrisi</label>
                 <select
                   name="nutrisi"
                   className={getSelectClassName(patient.nutrisi)}
                   value={patient.nutrisi}
                   onChange={handleChange}
                 >
-                  <option value="">Select nutrition condition</option>
-                  <option value="1">1 - Very Poor / Makan sangat sedikit</option>
-                  <option value="2">2 - Poor / Makan kurang</option>
-                  <option value="3">3 - Enough / Makan cukup</option>
-                  <option value="4">4 - Good / Makan baik</option>
+                  <option value="">Pilih kondisi nutrisi</option>
+                  <option value="1">1 - Sangat Buruk / Makan sangat sedikit</option>
+                  <option value="2">2 - Buruk / Makan kurang</option>
+                  <option value="3">3 - Cukup / Makan cukup</option>
+                  <option value="4">4 - Baik / Makan baik</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label>Friction / Shear</label>
+                <label>Gesekan / Gaya Geser</label>
                 <select
                   name="gesekan"
                   className={getSelectClassName(patient.gesekan)}
                   value={patient.gesekan}
                   onChange={handleChange}
                 >
-                  <option value="">Select friction/shear condition</option>
-                  <option value="1">1 - Problem</option>
-                  <option value="2">2 - Potential problem</option>
-                  <option value="3">3 - No apparent problem</option>
+                  <option value="">Pilih kondisi gesekan/ gaya geser</option>
+                  <option value="1">1 - Masalah</option>
+                  <option value="2">2 - Potensi masalah</option>
+                  <option value="3">3 - Tidak ada masalah yang terlihat</option>
                 </select>
               </div>
             </div>
@@ -329,23 +329,23 @@ export default function InputData() {
 
         <div className="assessment-result">
           <div>
-            <h3>Assessment Result</h3>
+            <h3>Hasil Penilaian</h3>
             <h2>
-              Total Braden Score: <span>{bradenScore}</span>
+              Total Skor Braden: <span>{bradenScore}</span>
             </h2>
             <p>
-              Risk: <b>{hasilRisiko.risiko}</b> | Reposition duration:{" "}
+              Risiko: <b>{hasilRisiko.risiko}</b> | Durasi Reposisi:{" "}
               <b>{hasilRisiko.keteranganDurasi}</b>
             </p>
           </div>
 
           <div className="result-actions">
             <button type="button" className="btn-outline" onClick={handleKosongkan}>
-              Reset
+              Kosongkan
             </button>
 
             <button type="button" className="btn-outline" onClick={handleLihatRisiko}>
-              Monitor Risk
+              Monitor Risiko
             </button>
 
             <button
@@ -353,7 +353,7 @@ export default function InputData() {
               className="btn-primary"
               style={{ padding: "10px 20px" }}
             >
-              {patient.id ? "Save Update" : "Save Record"} <ArrowRight size={16} />
+              {patient.id ? "Simpan Perubahan" : "Simpan Data"} <ArrowRight size={16} />
             </button>
           </div>
         </div>

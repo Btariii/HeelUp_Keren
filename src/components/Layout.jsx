@@ -28,7 +28,7 @@ function Sidebar() {
         </div>
         <div>
           <h2>HeelUp</h2>
-          <p>Pressure Monitoring</p>
+          <p>Pemantauan Tekanan</p>
         </div>
       </div>
 
@@ -38,21 +38,21 @@ function Sidebar() {
           className={`nav-item ${location.pathname === "/dashboard" ? "active" : ""}`}
         >
           <LayoutDashboard size={20} />
-          <span>Dashboard</span>
+          <span>Dasbor</span>
         </Link>
         <Link 
           to="/patients" 
           className={`nav-item ${location.pathname === "/patients" ? "active" : ""}`}
         >
           <Users size={20} />
-          <span>Patients</span>
+          <span>Daftar Pasien</span>
         </Link>
       </div>
 
       <div className="sidebar-footer">
         <button className="nav-item" onClick={handleLogout} style={{ background: "transparent", border: "none", width: "100%", textAlign: "left", fontFamily: "inherit" }}>
           <LogOut size={20} />
-          <span>Logout</span>
+          <span>Keluar</span>
         </button>
       </div>
     </div>
@@ -72,10 +72,10 @@ export default function Layout() {
   }, [isDarkMode]);
 
   const getPageTitle = () => {
-    if (location.pathname === "/dashboard") return "Input Data";
-    if (location.pathname === "/monitoring") return "Monitor Risk";
-    if (location.pathname === "/patients") return "Patients Directory";
-    return "Dashboard";
+    if (location.pathname === "/dashboard") return "Masukan Data Pasien";
+    if (location.pathname === "/monitoring") return "Monitor Risiko";
+    if (location.pathname === "/patients") return "Direktori Pasien";
+    return "Dasbor";
   };
 
   return (
