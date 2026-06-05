@@ -237,9 +237,9 @@ const riskMap = {
                           <td>{formatGender(historyRecord.jenisKelamin)}</td>
                           <td>{historyRecord.umur} thn</td>
                           <td>
-                            <div className={`risk-tag ${historyRecord.risk === "HIGH" ? "high" : historyRecord.risk === "MEDIUM" ? "medium" : "low"}`}>
-                              <div className={`pill-dot ${historyRecord.risk === "HIGH" ? "high" : historyRecord.risk === "MEDIUM" ? "medium" : "low"}`}></div>
-                              {formatRiskLabel(historyRecord.risk)}
+                            <div className={`risk-tag ${riskMap[historyRecord.risk].className}`}>
+                              <div  className={`pill-dot ${riskMap[historyRecord.risk].className}`}></div>
+                              {riskMap[historyRecord.risk].label}
                             </div>
                           </td>
                           <td>
@@ -290,7 +290,7 @@ const riskMap = {
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ color: "var(--text-muted)" }}>Jenis Kelamin</span>
-                <b>{viewPatient.jenisKelamin}</b>
+                <b>{formatGender(viewPatient.jenisKelamin)}</b>
               </div>
               <hr style={{ borderColor: "var(--border-color)", margin: "12px 0" }} />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -299,8 +299,8 @@ const riskMap = {
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span style={{ color: "var(--text-muted)" }}>Risiko Luka Tekan</span>
-                <div className={`risk-tag ${viewPatient.risk === "HIGH" ? "high" : "low"}`}>
-                  {viewPatient.risk || "LOW"}
+                <div className={`risk-tag ${riskMap[viewPatient.risk].className}`}>
+                  {riskMap[viewPatient.risk].label}
                 </div>
               </div>
             </div>
