@@ -2,6 +2,8 @@ import { useFirebase } from "../context/FirebaseContext";
 import { IdCard, Gauge, Clock, BellRing, CheckCircle, AlertCircle, Info, Loader, Save, ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { database } from "../firebase.js"; // file firebase.js dari tahap 2
+import { ref, onValue } from "firebase/database";
 
 export default function Dashboard() {
   const {
@@ -51,6 +53,18 @@ export default function Dashboard() {
       clearInterval(scrambleInterval);
       clearTimeout(timeout);
     };
+  }, []);
+
+  // --- Ambil data sensor realtime dari Firebase ---
+  useEffect(() => {
+    const sensorRef = ref(database, "sensorFSR"); // node Firebase
+    const unsubscribe = onValue(sensorRef, (snapshot) => {
+      const sensorValue = snapshot.val();
+      setDisplayPressure(sensorValue); // update state realtime
+      console.log("Sensor FSR:", sensorValue);
+    });
+
+    return () => unsubscribe(); // cleanup listener saat komponen unmount
   }, []);
 
   const hitungBraden = () => {
