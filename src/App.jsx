@@ -12,30 +12,30 @@ import "./App.css";
 
 function App() {
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", "light");
-
-    return () => {
       document.documentElement.setAttribute("data-theme", "light");
-    };
-  }, []);
 
-  return (
-    <FirebaseProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/menu" element={<MenuChoice />} />
-          <Route element={<Layout />}>
-            <Route path="/dashboard" element={<InputData />} />
-            <Route path="/monitoring" element={<Dashboard />} />
-            <Route path="/patients" element={<Patients />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
-    </FirebaseProvider>
-  );
-}
+          return () => {
+                document.documentElement.setAttribute("data-theme", "light");
+                    };
+                      }, []);
 
-export default App;
+                        return (
+                            <FirebaseProvider>
+                                  <Router>
+                                          <Routes>
+                                                    <Route path="/" element={<Login />} />
+                                                              <Route path="/signup" element={<Signup />} />
+                                                                        <Route path="/menu" element={<MenuChoice />} />
+                                                                                  <Route element={<Layout />}>
+                                                                                              <Route path="/dashboard" element={<InputData />} />
+                                                                                                          <Route path="/monitoring" element={<Dashboard />} />
+                                                                                                                      <Route path="/patients" element={<Patients />} />
+                                                                                                                                </Route>
+                                                                                                                                          <Route path="*" element={<Navigate to="/" replace />} />
+                                                                                                                                                  </Routes>
+                                                                                                                                                        </Router>
+                                                                                                                                                            </FirebaseProvider>
+                                                                                                                                                              );
+                                                                                                                                                              }
+
+                                                                                                                                                              export default App;

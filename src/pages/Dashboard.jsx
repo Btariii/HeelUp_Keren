@@ -57,15 +57,14 @@ export default function Dashboard() {
 
   // --- Ambil data sensor realtime dari Firebase ---
   useEffect(() => {
-    const sensorRef = ref(database, "sensorFSR"); // node Firebase
-    const unsubscribe = onValue(sensorRef, (snapshot) => {
-      const sensorValue = snapshot.val();
-      setDisplayPressure(sensorValue); // update state realtime
-      console.log("Sensor FSR:", sensorValue);
-    });
-
-    return () => unsubscribe(); // cleanup listener saat komponen unmount
-  }, []);
+  if (!database) return; // jangan jalanin jika database undefined
+  const sensorRef = ref(database, "sensorFSR");
+  const unsubscribe = onValue(sensorRef, snapshot => {
+    const val = snapshot.val();
+    if (val != null) setDisplayPressure(val);
+  });
+  return () => unsubscribe();
+}, [database]);
 
   const hitungBraden = () => {
     return (
@@ -86,10 +85,9 @@ export default function Dashboard() {
 
   const angle = Math.min(Math.max((finalPressure / 100) * 180 - 90, -90), 90);
 
-  const waktuReposisi = lastReposition.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const waktuReposisi = lastReposition
+  ? new Date(lastReposition).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
+  : "-";
 
   const isPatientFormComplete = Boolean(
     patient.nama &&
@@ -218,17 +216,17 @@ export default function Dashboard() {
           <div className="patient-info-row">
             <span>Nama</span>
             <span>:</span>
-            <span>{patient.nama || "-"}</span>
+            <span>{patient?.nama ?? "-"}</span>
           </div>
           <div className="patient-info-row">
             <span>Umur</span>
             <span>:</span>
-            <span>{patient.umur || "-"} tahun</span>
+            <span>{patient?.umur ?? "-"}</span>
           </div>
           <div className="patient-info-row">
             <span>Jenis Kelamin</span>
             <span>:</span>
-            <span>{formatGender(patient.jenisKelamin)}</span>
+            <span>{formatGender(patient?.jenisKelamin)}</span>
           </div>
         </div>
 
