@@ -56,17 +56,13 @@ export default function Dashboard() {
   }, []);
 
    // --- State lokal untuk sensor realtime ---
-  const [isCalculating, setIsCalculating] = useState(true);
-  const [displayPressure, setDisplayPressure] = useState(0);
   const [servoStatus, setServoStatus] = useState("-");
   const [prosesReposisi, setProsesReposisi] = useState(false);
   const [tahapReposisi, setTahapReposisi] = useState(0);
   const [timerReposisi, setTimerReposisi] = useState(0);
   const [jumlahReposisi, setJumlahReposisi] = useState(0);
   const [durasiTiapTahap, setDurasiTiapTahap] = useState(0);
-  const [displayBraden, setDisplayBraden] = useState(0);
-  const [saveMessage, setSaveMessage] = useState(""); 
-
+  
   // --- Ambil data sensor realtime dari Firebase ---
   useEffect(() => {
   if (!database) return; // aman kalau database belum siap
