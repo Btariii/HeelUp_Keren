@@ -7,13 +7,13 @@ import { ref, onValue } from "firebase/database";
 
 export default function Dashboard() {
   const {
-    pressure,
-    servoStatus,
-    prosesReposisi,
-    timerReposisi,
-    tahapReposisi,
-    jumlahReposisi,
-    lastReposition,
+    //pressure,
+    //servoStatus,
+    //prosesReposisi,
+    //timerReposisi,
+    //tahapReposisi,
+    //jumlahReposisi,
+    //lastReposition,
     patient,
     addPatient,
     updatePatientRecord,
@@ -55,15 +55,81 @@ export default function Dashboard() {
     };
   }, []);
 
+   // --- State lokal untuk sensor realtime ---
+  const [isCalculating, setIsCalculating] = useState(true);
+  const [displayPressure, setDisplayPressure] = useState(0);
+  const [servoStatus, setServoStatus] = useState("-");
+  const [prosesReposisi, setProsesReposisi] = useState(false);
+  const [tahapReposisi, setTahapReposisi] = useState(0);
+  const [timerReposisi, setTimerReposisi] = useState(0);
+  const [jumlahReposisi, setJumlahReposisi] = useState(0);
+  const [durasiTiapTahap, setDurasiTiapTahap] = useState(0);
+  const [displayBraden, setDisplayBraden] = useState(0);
+  const [saveMessage, setSaveMessage] = useState(""); 
+
   // --- Ambil data sensor realtime dari Firebase ---
   useEffect(() => {
-  if (!database) return; // jangan jalanin jika database undefined
-  const sensorRef = ref(database, "sensorFSR");
-  const unsubscribe = onValue(sensorRef, snapshot => {
+  if (!database) return; // aman kalau database belum siap
+
+  // tekanan
+  const tekananRef = ref(database, "/sensor/tekanan");
+  const unsubscribeTekanan = onValue(tekananRef, snapshot => {
     const val = snapshot.val();
     if (val != null) setDisplayPressure(val);
   });
-  return () => unsubscribe();
+
+  // servoStatus
+  const servoRef = ref(database, "/sensor/servoStatus");
+  const unsubscribeServo = onValue(servoRef, snapshot => {
+    const val = snapshot.val();
+    if (val != null) setServoStatus(val);
+  });
+
+  // prosesReposisi
+  const prosesRef = ref(database, "/sensor/prosesReposisi");
+  const unsubscribeProses = onValue(prosesRef, snapshot => {
+    const val = snapshot.val();
+    if (val != null) setProsesReposisi(val);
+  });
+
+  // tahapReposisi
+  const tahapRef = ref(database, "/sensor/tahapReposisi");
+  const unsubscribeTahap = onValue(tahapRef, snapshot => {
+    const val = snapshot.val();
+    if (val != null) setTahapReposisi(val);
+  });
+
+  // timerReposisi
+  const timerRef = ref(database, "/sensor/timerReposisi");
+  const unsubscribeTimer = onValue(timerRef, snapshot => {
+    const val = snapshot.val();
+    if (val != null) setTimerReposisi(val);
+  });
+
+  // jumlahReposisi
+  const jumlahRef = ref(database, "/sensor/jumlahReposisi");
+  const unsubscribeJumlah = onValue(jumlahRef, snapshot => {
+    const val = snapshot.val();
+    if (val != null) setJumlahReposisi(val);
+  });
+
+  // durasi tiap tahap
+  const durasiRef = ref(database, "/sensor/durasiTiapTahapDetik");
+  const unsubscribeDurasi = onValue(durasiRef, snapshot => {
+    const val = snapshot.val();
+    if (val != null) setDurasiTiapTahap(val);
+  });
+
+  // cleanup semua listener saat komponen unmount
+  return () => {
+    unsubscribeTekanan();
+    unsubscribeServo();
+    unsubscribeProses();
+    unsubscribeTahap();
+    unsubscribeTimer();
+    unsubscribeJumlah();
+    unsubscribeDurasi();
+  };
 }, [database]);
 
   const hitungBraden = () => {
