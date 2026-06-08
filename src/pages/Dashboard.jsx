@@ -70,8 +70,8 @@ export default function Dashboard() {
   // tekanan
   const tekananRef = ref(database, "/sensor/tekanan");
   const unsubscribeTekanan = onValue(tekananRef, snapshot => {
-    const val = snapshot.val();
-    if (val != null) setDisplayPressure(val);
+    const tekananVal = snapshot.val();
+    if (tekananVal != null) setDisplayPressure(tekananVal);
   });
 
   // servoStatus
@@ -130,12 +130,12 @@ export default function Dashboard() {
 
   const hitungBraden = () => {
     return (
-      Number(patient.persepsiSensori || 0) +
-      Number(patient.kelembapan || 0) +
-      Number(patient.aktivitas || 0) +
-      Number(patient.mobilitas || 0) +
-      Number(patient.nutrisi || 0) +
-      Number(patient.gesekan || 0)
+      Number(patient?.persepsiSensori || 0) +
+      Number(patient?.kelembapan || 0) +
+      Number(patient?.aktivitas || 0) +
+      Number(patient?.mobilitas || 0) +
+      Number(patient?.nutrisi || 0) +
+      Number(patient?.gesekan || 0)
     );
   };
 
@@ -165,12 +165,12 @@ export default function Dashboard() {
 
   const hitungSkorBraden = () => {
     return (
-      Number(patient.persepsiSensori || 0) +
-      Number(patient.kelembapan || 0) +
-      Number(patient.aktivitas || 0) +
-      Number(patient.mobilitas || 0) +
-      Number(patient.nutrisi || 0) +
-      Number(patient.gesekan || 0)
+      Number(patient?.persepsiSensori || 0) +
+      Number(patient?.kelembapan || 0) +
+      Number(patient?.aktivitas || 0) +
+      Number(patient?.mobilitas || 0) +
+      Number(patient?.nutrisi || 0) +
+      Number(patient?.gesekan || 0)
     );
   };
 
@@ -330,7 +330,7 @@ export default function Dashboard() {
                 style={{ transform: `rotate(${angle}deg)` }}
               ></div>
               <div className="gauge-value">
-                <h3>{finalPressure.toFixed(1)}</h3>
+                <h3>{finalPressure?.toFixed(1) ?? 0}</h3>
                 <p>mmHg</p>
               </div>
             </div>
